@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 export default function Home() {
   const noButtonRef = useRef<HTMLButtonElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [question, setQuestion] = useState("Beni seviyor musun Ayşenur? 💖");
+  const [question] = useState("Beni seviyor musun Ayşenur? 💖");
   const [yesClicked, setYesClicked] = useState(false);
 
   const moveNoButton = () => {
