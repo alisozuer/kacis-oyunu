@@ -1,95 +1,136 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const noButtonRef = useRef<HTMLButtonElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [question, setQuestion] = useState("Beni seviyor musun Ayşenur? 💖");
+  const [yesClicked, setYesClicked] = useState(false);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const moveNoButton = () => {
+    const button = noButtonRef.current;
+    const container = containerRef.current;
+    const yesButton = container?.querySelector('button:first-child');
+
+    if (button && container && yesButton) {
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      const buttonWidth = button.offsetWidth;
+      const buttonHeight = button.offsetHeight;
+
+      const yesButtonWidth = (yesButton as HTMLElement).offsetWidth;
+
+      const minX = yesButtonWidth + 20;
+      const maxX = containerWidth - buttonWidth;
+      const maxY = containerHeight - buttonHeight;
+
+      const randomX = Math.floor(Math.random() * (maxX - minX)) + minX;
+      const randomY = Math.floor(Math.random() * maxY);
+
+      button.style.left = `${randomX}px`;
+      button.style.top = `${randomY}px`;
+    }
+  };
+
+  useEffect(() => {
+    const handleTouch = (e: TouchEvent) => {
+      if (e.target === noButtonRef.current) {
+        moveNoButton();
+      }
+    };
+
+    document.addEventListener("touchstart", handleTouch);
+    return () => {
+      document.removeEventListener("touchstart", handleTouch);
+    };
+  }, []);
+
+  return (
+    <div
+      style={{
+        height: "100vh",
+        width: "100vw",
+        background: "linear-gradient(135deg, #fddde6, #fef6f9)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+        position: "relative",
+        fontFamily: "'Comic Neue', cursive",
+        padding: "1rem",
+        textAlign: "center",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "2.5rem",
+          fontSize: "2rem",
+          color: "#c71585",
+          fontWeight: 700,
+          textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
+        }}
+      >
+        {yesClicked ? "Evet evet ben de seni seviyorum :)" : question}
+      </h1>
+
+      <div
+        ref={containerRef}
+        style={{
+          position: "relative",
+          width: "90vw",
+          maxWidth: "600px",
+          height: "600px",
+          borderRadius: "20px",
+          background: "#fff0f5",
+          padding: "1rem",
+        }}
+      >
+        <button
+          onClick={() => setYesClicked(true)}
+          style={{
+            padding: "1rem 2.5rem",
+            fontSize: "1.2rem",
+            borderRadius: "50px",
+            border: "none",
+            background: "linear-gradient(45deg, #ff69b4, #ff1493)",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+            position: "absolute",
+            left: "20px",
+            top: "20px",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+            transition: "transform 0.1s ease",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          💌 Evet
+        </button>
+
+        <button
+          ref={noButtonRef}
+          onMouseEnter={moveNoButton}
+          style={{
+            padding: "1rem 2.5rem",
+            fontSize: "1.2rem",
+            borderRadius: "50px",
+            border: "1px solid #ff4d4d",
+            backgroundColor: "rgba(224, 36, 94, 0.1)",
+            color: "#ff4d4d",
+            fontWeight: "bold",
+            cursor: "pointer",
+            position: "absolute",
+            left: "200px",
+            top: "20px",
+            transition: "all 0.3s ease",
+            boxShadow: "0 4px 8px rgba(255,77,77,0.3)",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          ❌ Hayır
+        </button>
+      </div>
     </div>
   );
 }
